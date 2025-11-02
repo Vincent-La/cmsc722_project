@@ -4,6 +4,42 @@ import sys
 import GTPyhop.gtpyhop as gtpyhop
 import pddlgym
 
+path_to_gym = "pddlgym/"
+
+domain_name = "easyblocks"
+the_domain = gtpyhop.Domain(domain_name)
+
+rigid = gtpyhop.State('rigid relations')
+rigid.types = {
+    'block' : ['a', 'b', 'c', 'd'],
+    'robot' : ['robot']
+}
+
+initial = gtpyhop.State('state0')
+initial.on_table = {
+    'a': True,
+    'b': True,
+    'c': True,
+    'd': True
+}
+
+initial.clear = {
+    'a': True,
+    'b': True,
+    'c': True,
+    'd': True
+}
+
+initial.on = {
+    'a': None,
+    'b': None,
+    'c': None,
+    'd': None
+}
+
+initial.holding = {
+    'robot': None
+}
 
 
 # Helper
@@ -120,43 +156,6 @@ gtpyhop.declare_multigoal_methods(gtpyhop.m_split_multigoal)
 
 # Implementing a lazy lookahead using GTPyhop
 def main():
-
-    path_to_gym = "pddlgym/"
-
-    domain_name = "easyblocks"
-    the_domain = gtpyhop.Domain(domain_name)
-
-    rigid = gtpyhop.State('rigid relations')
-    rigid.types = {
-        'block' : ['a', 'b', 'c', 'd'],
-        'robot' : ['robot']
-    }
-
-    initial = gtpyhop.State('state0')
-    initial.on_table = {
-        'a': True,
-        'b': True,
-        'c': True,
-        'd': True
-    }
-
-    initial.clear = {
-        'a': True,
-        'b': True,
-        'c': True,
-        'd': True
-    }
-
-    initial.on = {
-        'a': None,
-        'b': None,
-        'c': None,
-        'd': None
-    }
-
-    initial.holding = {
-        'robot': None
-    }
 
     print("Domain: ", domain_name)
 
