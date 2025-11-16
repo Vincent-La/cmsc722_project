@@ -54,6 +54,9 @@ def main(args):
 
     print("Statistics:", planner.get_statistics())
 
+    # create animation with imagemagick
+    os.system(f"magick -delay 30 {args.exp_dir}/* {args.exp_dir}/animation.gif")
+
 
 if __name__ == "__main__":
     args = parse_args()
