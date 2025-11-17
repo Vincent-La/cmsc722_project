@@ -50,7 +50,7 @@ def main(args):
 
 
     print("Final obs, reward, done:", obs, reward, done)
-    len(plan)
+    print("\n------------------")
 
     print("Statistics:", planner.get_statistics())
 
