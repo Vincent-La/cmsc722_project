@@ -1,22 +1,24 @@
-import sys
-
-# sys.path.append('../')
 import GTPyhop.gtpyhop as gtpyhop
 import pddlgym
-import matplotlib.pyplot as plt
-from path_finding import Coord, PathSolver, Coord
 from gtpyhop_snake_methods import *
-
+import time
 
 
 class HTN:
     def __init__(self, env, problem_name):
         self._env = env
+        self.stats = {}
         self._init_domain(problem_name)
         self._declare_gtpyhop_methods()
 
     def __call__(self, domain, obs):
+        start = time.time()
         result = gtpyhop.find_plan(self.initial, [self.multigoal])
+        end = time.time()
+
+        self.stats['total_time'] = f"{end - start:.6f}"
+        self.stats['plan_length'] = len(result)
+
         result = self.convert_htn_plan_to_pddlgym(result)
         return result
     
@@ -26,7 +28,7 @@ class HTN:
 
     def get_statistics(self):
         # Placeholder for returning planner statistics
-        return {"planner": "HTN", "status": "not implemented"}
+        return self.stats
     
 
     def _declare_gtpyhop_methods(self):

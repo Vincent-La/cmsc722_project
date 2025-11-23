@@ -56,7 +56,14 @@ def main(args):
     print("Final obs, reward, done:", obs, reward, done)
     print("\n------------------")
 
+    with open(os.path.join(args.exp_dir, "plan.txt"), "w") as f:
+        for action in plan:
+            f.write(f"{action}\n")
+
     print("Statistics:", planner.get_statistics())
+
+    with open(os.path.join(args.exp_dir, "statistics.txt"), "w") as f:
+        f.write(str(planner.get_statistics()))
 
     # create animation with imagemagick
     os.system(f"magick -delay 30 {args.exp_dir}/* {args.exp_dir}/animation.gif")

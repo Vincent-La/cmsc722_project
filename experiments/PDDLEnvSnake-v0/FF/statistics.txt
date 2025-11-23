@@ -1,0 +1,1 @@
+{'num_node_expansions': 113, 'plan_length': 29, 'total_time': 0.01, 'search_time': 0.01}
