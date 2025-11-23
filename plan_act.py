@@ -3,6 +3,7 @@ import gym
 import imageio
 from pddlgym_planners.ff import FF  # FastForward
 from pddlgym_planners.fd import FD  # FastDownward
+from htn import HTN  # Hierarchical Task Network planner
 import os
 from argparse import ArgumentParser
 
@@ -11,16 +12,19 @@ def parse_args():
     parser = ArgumentParser()
     parser.add_argument('--env', type=str, default='PDDLEnvSnake-v0', help='The PDDLGym environment to use.')
     # TODO: add HTN planner
-    parser.add_argument('--planner', type=str, choices=['ff', 'fd'], default='ff', help='The planner to use: ff (FastForward) or fd (FastDownward).')
+    parser.add_argument('--planner', type=str, choices=['ff', 'fd', 'htn'], default='ff', help='The planner to use: ff (FastForward) or fd (FastDownward).')
     parser.add_argument('--exp_dir', type=str, default='./experiments', help='Directory to save experiment outputs.')
     return parser.parse_args()
 
 ''' Initialize the specified planner '''
-def init_planner(planner_name):
+def init_planner(planner_name, env, problem_name):
     if planner_name == 'ff':
         return FF()
+    # TODO: this one seems to crash
     elif planner_name == 'fd':
         return FD()
+    elif planner_name == 'htn':
+        return HTN(env, problem_name)
     else:
         raise ValueError(f"Unknown planner: {planner_name}")
     
@@ -34,7 +38,7 @@ def main(args):
     img = env.render()
     imageio.imsave(os.path.join(args.exp_dir, f"{args.env}_step_00.png"), img)
 
-    planner = init_planner(args.planner)
+    planner = init_planner(args.planner, env, args.env)
     plan = planner(env.domain, obs)
 
     state_index = 1
