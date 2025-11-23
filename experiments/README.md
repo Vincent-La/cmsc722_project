@@ -5,7 +5,13 @@
 + White = food
 + Black = empty cell
 
-## FF PDDL Planner
-| Problem | Plan Length | Rendered Plan |
-| ------- | ----------- | ------------- |
-|  p01    |     29      | ![](./PDDLEnvSnake-v0/FF/animation.gif) | 
+## Problem p01
+
+#### Problem Initial State
+![](./PDDLEnvSnake-v0/FF/PDDLEnvSnake-v0_step_00.png)
+
+
+| Planner                         | Plan Length | Planner Total Time (s) | Rendered Plan |
+| -------                         | ----------- |   ---------------      | ------------- |
+|  Fast-Forward (FF)              |     29      |       0.1              | ![](./PDDLEnvSnake-v0/FF/animation.gif)  | 
+|  Hiearchical Task Network (HTN) |     27      |     0.008375           | ![](./PDDLEnvSnake-v0/HTN/animation.gif) |
