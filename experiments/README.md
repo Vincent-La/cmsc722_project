@@ -1,6 +1,7 @@
 # Experiments Overview
 
 + Red = snake head
++ Green = snake body
 + Yellow = snake tail
 + White = food
 + Black = empty cell
