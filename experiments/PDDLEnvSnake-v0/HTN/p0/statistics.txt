@@ -1,1 +1,1 @@
-{'total_time': '0.009304', 'plan_length': 27}
+{'total_time': '0.008530', 'plan_length': 27}

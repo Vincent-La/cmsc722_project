@@ -163,6 +163,7 @@ def m_get_food_unigoal(state, food_point, val):
     # take step towards food if path exists
     path_to_food = ps.shortest_path_to_coord(food_coord)
 
+    print(f'path_to_food:{path_to_food}')
     # print(f'make_move_action_to_coord: {make_move_action_to_coord(state, snake_coords, next_coord)}')
 
    # no need to worry about deadlock if this is the final food piece

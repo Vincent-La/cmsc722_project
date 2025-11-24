@@ -12,6 +12,9 @@ class HTN:
         self._declare_gtpyhop_methods()
 
     def __call__(self, domain, obs):
+        # NOTE set to 0 for performance
+        gtpyhop.verbose = 3
+
         start = time.time()
         result = gtpyhop.find_plan(self.initial, [self.multigoal])
         end = time.time()
@@ -203,7 +206,7 @@ class HTN:
             initial.tailsnake = {tailsnake: True} | {coord: False for coord in rigid.types['coord'] if coord != tailsnake}
 
             # set initial head position
-            headsnake = 'pos4-0'
+            headsnake = 'pos3-1'
             initial.headsnake = {headsnake: True} | {coord: False for coord in rigid.types['coord'] if coord != headsnake}
 
             # initial nextsnake position
