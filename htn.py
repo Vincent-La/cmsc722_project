@@ -5,10 +5,10 @@ import time
 
 
 class HTN:
-    def __init__(self, env, problem_name):
+    def __init__(self, env, prob_idx):
         self._env = env
         self.stats = {}
-        self._init_domain(problem_name)
+        self._init_domain(prob_idx)
         self._declare_gtpyhop_methods()
 
     def __call__(self, domain, obs):
@@ -37,11 +37,11 @@ class HTN:
         gtpyhop.declare_multigoal_methods(m_get_all_food_multigoal)
         
 
-    def _init_domain(self, problem_name):
+    def _init_domain(self, prob_idx):
 
-        domain = gtpyhop.Domain(problem_name)
+        domain = gtpyhop.Domain(f'Snake_p{prob_idx}')
 
-        if problem_name == 'PDDLEnvSnake-v0':
+        if prob_idx == 0:
             rigid = gtpyhop.State('rigid relations')
 
             # snake domain is only coordinates/fields according to problem size
@@ -138,6 +138,112 @@ class HTN:
                 'pos1-3': False,
                 'pos2-4': False,
                 'pos4-1': False,
+                'pos2-0': False,
+                'pos1-4': False,
+                'pos1-1': False,
+                'pos0-1': False,
+                'pos3-3': False,
+                'pos4-2': False,
+                'pos3-4': False,
+                'pos0-0': False,
+                'pos1-2': False,
+                'pos1-0': False,
+            }
+
+        # same as p0 but with less initial food spawns
+        elif prob_idx == 1:
+            rigid = gtpyhop.State('rigid relations')
+
+            # snake domain is only coordinates/fields according to problem size
+            # p01/pddl is a 5x5 grid, so coords are (0,0) to (4,4)
+            size = 5
+            coords = []
+            for i in range(size):
+                for j in range(size):
+                    coord = f'pos{i}-{j}'
+                    coords.append(coord)
+
+            coords.append('dummypoint')
+
+            rigid.types = {
+                'coord': coords,
+            }
+
+            # define initial state for p01
+
+            initial = gtpyhop.State('state0')
+            initial.grid_size = size
+
+            # point adjacency relations
+            isadjacent = {'dummypoint': []}
+
+            for i in range(size):
+                for j in range(size):
+                    coord = f'pos{i}-{j}'
+                    adjacent_coords = []
+                    # up
+                    if i > 0:
+                        adjacent_coords.append(f'pos{i-1}-{j}')
+                    # down
+                    if i < size - 1:
+                        adjacent_coords.append(f'pos{i+1}-{j}')
+                    # left
+                    if j > 0:
+                        adjacent_coords.append(f'pos{i}-{j-1}')
+                    # right
+                    if j < size - 1:
+                        adjacent_coords.append(f'pos{i}-{j+1}')
+                    isadjacent[coord] = adjacent_coords
+
+            initial.isadjacent = isadjacent
+
+            # snake spawn + point spawns
+            # set initial tail position
+            tailsnake  = 'pos3-0'
+            initial.tailsnake = {tailsnake: True} | {coord: False for coord in rigid.types['coord'] if coord != tailsnake}
+
+            # set initial head position
+            headsnake = 'pos4-0'
+            initial.headsnake = {headsnake: True} | {coord: False for coord in rigid.types['coord'] if coord != headsnake}
+
+            # initial nextsnake position
+            nextsnake = {headsnake: tailsnake}
+            initial.nextsnake = nextsnake | {coord: None for coord in rigid.types['coord'] if coord not in nextsnake.keys()}
+
+            # set blocked positions (obstacles + snake spawnpoints)
+            # NOTE: no obstacles in p01
+            blocked_pos = []
+            blocked_pos.extend([tailsnake, headsnake])
+            initial.blocked = {coord: True for coord in blocked_pos} | {coord: False for coord in rigid.types['coord'] if coord not in blocked_pos}
+            
+            # set initial food spawn
+            spawn = 'pos2-0'
+            initial.spawn = {spawn: True} | {coord: False for coord in rigid.types['coord'] if coord != spawn}
+
+            # nextspawn relations
+            nextspawn = {
+                'pos1-0' :'dummypoint',
+                'pos2-0' :'pos1-4',
+                'pos1-4' :'pos1-1',
+                'pos1-1' :'pos0-1',
+                'pos0-1' :'pos3-3',
+                'pos3-3' :'pos4-2',
+                'pos4-2' :'pos3-4',
+                'pos3-4' :'pos0-0',
+                'pos0-0' :'pos1-2',
+                'pos1-2' :'pos1-0'
+            }
+
+            initial.nextspawn = nextspawn | {coord: None for coord in rigid.types['coord'] if coord not in nextspawn.keys()}
+
+            # ispoint
+            ispoint = ['pos0-4']
+            initial.ispoint = {coord: True for coord in ispoint} | {coord: False for coord in rigid.types['coord'] if coord not in ispoint}
+
+            self.initial = initial
+            self.multigoal = gtpyhop.Multigoal('multigoal')
+            self.multigoal.ispoint = {
+                'pos0-4': False,
                 'pos2-0': False,
                 'pos1-4': False,
                 'pos1-1': False,
