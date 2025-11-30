@@ -261,6 +261,114 @@ class HTN:
                 # 'pos1-0': False,
             }
 
+        elif prob_idx == 2:
+            rigid = gtpyhop.State('rigid relations')
+
+            # snake domain is only coordinates/fields according to problem size
+            # p01/pddl is a 5x5 grid, so coords are (0,0) to (4,4)
+            size = 7
+            coords = []
+            for i in range(size):
+                for j in range(size):
+                    coord = f'pos{i}-{j}'
+                    coords.append(coord)
+
+            coords.append('dummypoint')
+
+            rigid.types = {
+                'coord': coords,
+            }
+
+            # define initial state for p01
+
+            initial = gtpyhop.State('state0')
+            initial.grid_size = size
+
+            # point adjacency relations
+            isadjacent = {'dummypoint': []}
+
+            for i in range(size):
+                for j in range(size):
+                    coord = f'pos{i}-{j}'
+                    adjacent_coords = []
+                    # up
+                    if i > 0:
+                        adjacent_coords.append(f'pos{i-1}-{j}')
+                    # down
+                    if i < size - 1:
+                        adjacent_coords.append(f'pos{i+1}-{j}')
+                    # left
+                    if j > 0:
+                        adjacent_coords.append(f'pos{i}-{j-1}')
+                    # right
+                    if j < size - 1:
+                        adjacent_coords.append(f'pos{i}-{j+1}')
+                    isadjacent[coord] = adjacent_coords
+
+            initial.isadjacent = isadjacent
+
+            # snake spawn + point spawns
+            # set initial tail position
+            tailsnake  = 'pos3-4'
+            initial.tailsnake = {tailsnake: True} | {coord: False for coord in rigid.types['coord'] if coord != tailsnake}
+
+            # set initial head position
+            headsnake = 'pos4-4'
+            initial.headsnake = {headsnake: True} | {coord: False for coord in rigid.types['coord'] if coord != headsnake}
+
+            # initial nextsnake position
+            nextsnake = {headsnake: tailsnake}
+            initial.nextsnake = nextsnake | {coord: None for coord in rigid.types['coord'] if coord not in nextsnake.keys()}
+
+            # set blocked positions (obstacles + snake spawnpoints)
+            # NOTE: no obstacles in p01
+            blocked_pos = []
+            blocked_pos.extend([tailsnake, headsnake])
+            initial.blocked = {coord: True for coord in blocked_pos} | {coord: False for coord in rigid.types['coord'] if coord not in blocked_pos}
+            
+            # set initial food spawn
+            spawn = 'pos2-0'
+            initial.spawn = {spawn: True} | {coord: False for coord in rigid.types['coord'] if coord != spawn}
+
+            # nextspawn relations
+            nextspawn = {
+                'pos2-0' :'pos1-5',
+                'pos1-5' :'pos5-2',
+                'pos5-2' :'pos4-4',
+                'pos4-4' :'pos2-6',
+                'pos2-6' :'pos1-6',
+                'pos1-6' :'pos3-0',
+                'pos3-0' :'pos0-5',
+                'pos0-5' :'dummypoint',
+            }
+
+            initial.nextspawn = nextspawn | {coord: None for coord in rigid.types['coord'] if coord not in nextspawn.keys()}
+
+            # ispoint
+            ispoint = ['pos6-5', 'pos5-6', 'pos6-6', 'pos2-3', 'pos2-2', 'pos4-3', 'pos1-2']
+            initial.ispoint = {coord: True for coord in ispoint} | {coord: False for coord in rigid.types['coord'] if coord not in ispoint}
+
+            self.initial = initial
+            self.multigoal = gtpyhop.Multigoal('multigoal')
+            self.multigoal.ispoint = {
+                'pos5-6': False,
+                'pos6-5': False,
+                'pos6-6': False,
+                'pos2-3': False,
+                'pos2-2': False,
+                'pos4-3': False,
+                'pos1-2': False,
+                'pos2-0': False,
+                'pos1-5': False,
+                'pos5-2': False,
+                'pos4-4': False,
+                'pos2-6': False,
+                'pos1-6': False,
+                'pos3-0': False,
+                'pos0-5': False,
+
+            }
+
         else:
             raise NotImplementedError("Only PDDLEnvSnake-v0 is implemented")
         
