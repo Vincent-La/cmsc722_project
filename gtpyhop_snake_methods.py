@@ -166,35 +166,84 @@ def m_get_food_unigoal(state, food_point, val):
     print(f'path_to_food:{path_to_food}')
     # print(f'make_move_action_to_coord: {make_move_action_to_coord(state, snake_coords, next_coord)}')
 
+
    # no need to worry about deadlock if this is the final food piece
     final_food = (len(get_all_active_food(state)) == 1) and state.spawn['dummypoint']
+    print(f'FINAL FOOD STATUS: {final_food}')
+    next_coord = None
     if path_to_food and final_food:
+        print("UNSAFE STEP TOWARDS FOOD")
         # step towards food
         next_coord = head_coord.adj(path_to_food[0])
-        return [make_move_action_to_coord(state, snake_coords, next_coord), ('ispoint', food_point, val)]
 
+    # check if path to tail exists (to avoid deadlock)
     else:
-        # check if path to tail exists (to avoid deadlock)
-        path_to_tail = ps.longest_path_to_coord(tail_coord)
-        if len(path_to_tail) > 1:
-            # step towards food
-            if path_to_food:
-                next_coord = head_coord.adj(path_to_food[0])
-            # step towards tail
-            else:
-                next_coord = head_coord.adj(path_to_tail[0])
         
-        # TODO:
-        else:
-            
-            max_dist = -1
-            for adj in head_coord.all_adj():
-                if ps.is_safe(adj):
-                    dist = Coord.manhattan_dist(adj, food_coord)
-                    if dist > max_dist:
-                        max_dist = dist
-                        next_coord = adj
+        # try to take path with less turns to tail
+        consistent_dir = snake_coords[-2].direc_to(tail_coord)
+        adjs = tail_coord.all_adj()
+        for i in range(len(adjs)):
+            if tail_coord.direc_to(adjs[i]) == consistent_dir:
+                adjs[0], adjs[i] = adjs[i], adjs[0]
+                break
+        
+   
+        for adj in adjs:
+            if ps.is_safe(adj):
+                
+                # check if we can go towards food without getting stuck
+                if path_to_food:
+                    future_head = head_coord.adj(path_to_food[0])
+                    future_snake_coords = [future_head] + snake_coords
+                    ps.snake_coords = future_snake_coords
+
+                    path_to_tail = ps.longest_path_to_coord(adj)
+
+                    if len(path_to_tail) >= 1:
+                        print('took SAFE step towards food')
+                        next_coord = head_coord.adj(path_to_food[0])
+                        break 
+                
+                # step towards tail from current state
+                else:
+                    ps.snake_coords = snake_coords
+                    path_to_tail = ps.longest_path_to_coord(adj)
+               
+                    if len(path_to_tail) >= 1:
+                        next_coord = head_coord.adj(path_to_tail[0])
+                        print('took step towards tail')
+                        break
+
+                    # # safe step towards food
+                    # if path_to_food:
+                    #     next_coord = head_coord.adj(path_to_food[0])
+                    #     print('took step towards food')
+
+                    # step towards tail
+                    # else:
+                    #     next_coord = head_coord.adj(path_to_tail[0])
+                    #     print('took step towards tail')
+                    
+                    # break
+        
+    # step away from food to open up a path
+    if next_coord is None:
+        max_dist = -1
+        for adj in head_coord.all_adj():
+            # edge case where we need to step away from food to avoid deadlock
+            if ps.is_safe(adj) and adj != food_coord:
+                dist = Coord.manhattan_dist(adj, food_coord)
+                if dist > max_dist:
+                    max_dist = dist
+                    next_coord = adj
+
+                    print('took randomish action')
     
+    # no valid actions...
+    if next_coord is None:
+        print(f'no next_coord found...\nadj:{head_coord.all_adj()}\nbody: {snake_coords}')
+        return []
+
     return [make_move_action_to_coord(state, snake_coords, next_coord), ('ispoint', food_point, val)]
 
   
@@ -226,7 +275,7 @@ def m_get_all_food_multigoal(state, multigoal):
 
     for food_coord in food_coords:
 
-        # avoid pursuing a food that is currently occupied by the snake body
+        # try to avoid pursuing a food that is currently occupied by the snake body
         if food_coord not in snake_coords:
             dist = Coord.manhattan_dist(head_coord, food_coord)
 
@@ -234,6 +283,8 @@ def m_get_all_food_multigoal(state, multigoal):
                 min_dist = dist
                 closest_food = food_coord
     
+    if not closest_food:
+        closest_food = food_coords[0]
     
     # greedily pursue unigoal towards closest food
     closest_food = coord_to_pyhop(closest_food)

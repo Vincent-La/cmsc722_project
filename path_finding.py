@@ -122,12 +122,12 @@ class PathSolver():
     # check in bounds and no collision
     # NOTE: assuming only obstacles are the snake body
     def is_safe(self, coord:Coord):
-
-        if coord == self.snake_coords[-1] and coord == self.snake_coords[1]:
-            return False        
+        
+        # if coord == self.snake_coords[-1] and coord == self.snake_coords[1]:
+        #     return False        
 
         return (0 <= coord.x < len(self.table)) and (0 <= coord.y < len(self.table[0])) and \
-                not (coord in self.snake_coords[:-1])  # allow head to move to tail position
+                not (coord in self.snake_coords)  # avoid collision w/ body
 
     # determine if coordinate is valid for path finding
     def _is_valid(self, coord:Coord):

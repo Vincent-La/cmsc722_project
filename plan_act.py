@@ -5,6 +5,7 @@ from pddlgym_planners.ff import FF  # FastForward
 from pddlgym_planners.fd import FD  # FastDownward
 from htn import HTN  # Hierarchical Task Network planner
 import os
+import shutil
 from argparse import ArgumentParser
 
 ''' Parse command-line arguments '''
@@ -37,7 +38,12 @@ def init_planner(env, args):
 def main(args):
 
     output_dir = f'{args.exp_dir}/p{args.prob_idx}'
-    os.makedirs(output_dir, exist_ok=True)
+    # clean up dir for new results
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.makedirs(output_dir)
+
+    
 
     env = pddlgym.make(args.env)
     env.fix_problem_index(args.prob_idx)

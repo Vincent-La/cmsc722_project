@@ -1,0 +1,1 @@
+{'total_time': '0.015784', 'plan_length': 47}

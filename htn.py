@@ -13,7 +13,9 @@ class HTN:
 
     def __call__(self, domain, obs):
         # NOTE set to 0 for performance
-        gtpyhop.verbose = 3
+        gtpyhop.verbose = 0
+        # output plan regardless of success
+        # gtpyhop.verify_goals = False
 
         start = time.time()
         result = gtpyhop.find_plan(self.initial, [self.multigoal])
@@ -225,16 +227,16 @@ class HTN:
 
             # nextspawn relations
             nextspawn = {
-                'pos1-0' :'dummypoint',
+                # 'pos1-2' :'dummypoint',
                 'pos2-0' :'pos1-4',
                 'pos1-4' :'pos1-1',
                 'pos1-1' :'pos0-1',
                 'pos0-1' :'pos3-3',
                 'pos3-3' :'pos4-2',
-                'pos4-2' :'pos3-4',
-                'pos3-4' :'pos0-0',
-                'pos0-0' :'pos1-2',
-                'pos1-2' :'pos1-0'
+                'pos4-2' :'pos1-2',
+                # 'pos3-4' :'pos0-0',
+                # 'pos0-0' :'pos1-2',
+                'pos1-2' :'dummypoint'
             }
 
             initial.nextspawn = nextspawn | {coord: None for coord in rigid.types['coord'] if coord not in nextspawn.keys()}
@@ -253,10 +255,10 @@ class HTN:
                 'pos0-1': False,
                 'pos3-3': False,
                 'pos4-2': False,
-                'pos3-4': False,
-                'pos0-0': False,
+                # 'pos3-4': False,
+                # 'pos0-0': False,
                 'pos1-2': False,
-                'pos1-0': False,
+                # 'pos1-0': False,
             }
 
         else:
