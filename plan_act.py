@@ -64,7 +64,7 @@ def main(args):
         obs, reward, done, truncated, debug_info = env.step(action)
 
         img = env.render()
-        imageio.imsave(os.path.join(output_dir, f"{args.env}_step_{state_index:02d}.png"), img)
+        imageio.imsave(os.path.join(output_dir, f"{args.env}_step_{state_index:04d}.png"), img)
         state_index += 1
 
 

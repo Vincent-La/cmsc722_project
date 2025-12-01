@@ -36,3 +36,25 @@
 | -------                         | ----------- |   ---------------      | ------------- |
 |  Fast-Forward (FF)              |     41      |       0.11             | ![](./PDDLEnvSnake-v0/FF/p2/animation.gif)  | 
 |  Hiearchical Task Network (HTN) |     35      |     0.020910           | ![](./PDDLEnvSnake-v0/HTN/p2/animation.gif) |
+
+## Problem p3 (7x7, single food)
+
+#### Problem Initial State
+![](./PDDLEnvSnake-v0/FF/p3/PDDLEnvSnake-v0_step_00.png)
+
+| Planner                         | Plan Length | Planner Total Time (s) | Rendered Plan |
+| -------                         | ----------- |   ---------------      | ------------- |
+|  Fast-Forward (FF)              |     74      |       0.88             | ![](./PDDLEnvSnake-v0/FF/p3/animation.gif)  | 
+|  Hiearchical Task Network (HTN) |     76      |     0.046762           | ![](./PDDLEnvSnake-v0/HTN/p3/animation.gif) |
+
+## Problem p4 (7x7, single food)
++ More diffiult version of p3
+
+#### Problem Initial State
+![](./PDDLEnvSnake-v0/FF/p4/PDDLEnvSnake-v0_step_00.png)
+
+| Planner                         | Plan Length             | Planner Total Time (s) | Rendered Plan  |
+| -------                         | -----------             |   ---------------      | -------------  |
+|  Fast-Forward (FF)              |     No Plan Found!      |     No Plan Found!     | No Plan Found! | 
+|  Hiearchical Task Network (HTN) |     118                 |     0.075316           | ![](./PDDLEnvSnake-v0/HTN/p4/animation.gif) |
+

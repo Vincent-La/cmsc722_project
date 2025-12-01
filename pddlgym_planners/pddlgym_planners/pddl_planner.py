@@ -66,7 +66,12 @@ class PDDLPlanner(Planner):
             os.remove(dom_file)
             os.remove(prob_file)
         self._cleanup()
+
+        # @vla: manual overriding here 
+        timeout = 20
         if time.time()-start_time > timeout:
+            print(time.time()-start_time)
+            print(output)
             raise PlanningTimeout("Planning timed out!")
         pddl_plan = self._output_to_plan(output)
         if len(pddl_plan) > horizon:
