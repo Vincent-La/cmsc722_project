@@ -48,7 +48,7 @@
 |  Hiearchical Task Network (HTN) |     76      |     0.046762           | ![](./PDDLEnvSnake-v0/HTN/p3/animation.gif) |
 
 ## Problem p4 (7x7, single food)
-+ More diffiult version of p3
++ More difficult version of p3
 
 #### Problem Initial State
 ![](./PDDLEnvSnake-v0/FF/p4/PDDLEnvSnake-v0_step_00.png)

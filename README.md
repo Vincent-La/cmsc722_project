@@ -1,5 +1,23 @@
 # Snake HTN Planner With GTPyhop
 
+Experimenting with PDDL and Hierarchical Task Network Planners for a classic Snake game environment
+
+## Planning Models
++ Fast Foward (FF) Planner
+  + Using the pddlgym_planners implmentation at [ff.py](pddlgym_planners/pddlgym_planners/ff.py)
+
++ Hierarchical Task Network (HTN) Planner
+  + Implementation at [htn.py](htn.py)
+  + Utilizes GTPyhop, methods and actions defined in [gtpyhop_snake_methods.py](gtpyhop_snake_methods.py)
+
++ Plan + Act w/ Snake Environment
+  + [plan_act.py](plan_act.py) implements a Run-Lazy-Lookahead algorithm for planning and acting
+
+
+## Experimental Results
+
+See experiment results overview [here](experiments/README.md)
+
 ## Installation
 ```
 conda create -n SNAKE_HTN python==3.10 -y
