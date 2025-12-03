@@ -2,6 +2,12 @@
 
 Experimenting with PDDL and Hierarchical Task Network Planners for a classic Snake game environment
 
+## Snake Environment
+
++ Adapted Snake enivornment from `pddlgym`
+  + [PDDL domain file](pddlgym/pddlgym/pddl/snake.pddl)
+  + [PDDL problem files](pddlgym/pddlgym/pddl/snake)
+
 ## Planning Models
 + Fast Foward (FF) Planner
   + Using the pddlgym_planners implmentation at [ff.py](pddlgym_planners/pddlgym_planners/ff.py)
