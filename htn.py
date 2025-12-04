@@ -14,7 +14,6 @@ class HTN:
     def __call__(self, domain, obs):
         # NOTE set to 0 for performance
         gtpyhop.verbose = 0
-        # output plan regardless of success
         # gtpyhop.verify_goals = False
 
         start = time.time()

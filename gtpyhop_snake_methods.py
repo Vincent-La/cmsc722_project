@@ -96,8 +96,6 @@ def move(state, head, newhead, tail, newtail):
 def move_and_eat_spawn(state, head, newhead, spawnpoint, nextspawnpoint):
     
 
-    print("\nmove_and_eat_spawn called")
-
     if state.headsnake[head] and \
        newhead in state.isadjacent[head] and \
        not state.blocked[newhead] and \
@@ -145,7 +143,6 @@ def move_and_eat_no_spawn(state, head, newhead):
 # unigoal to collect food at food_coord
 # pyhop check is setting ispoint[food_coord] to False == val
 def m_get_food_unigoal(state, food_point, val):
-    print(f'\nm_get_food_unigoal called for food at {food_point}')
 
     # unigoal acheived
     if state.ispoint[food_point] == val:
@@ -163,16 +160,10 @@ def m_get_food_unigoal(state, food_point, val):
     # take step towards food if path exists
     path_to_food = ps.shortest_path_to_coord(food_coord)
 
-    print(f'path_to_food:{path_to_food}')
-    # print(f'make_move_action_to_coord: {make_move_action_to_coord(state, snake_coords, next_coord)}')
-
-
    # no need to worry about deadlock if this is the final food piece
     final_food = (len(get_all_active_food(state)) == 1) and state.spawn['dummypoint']
-    print(f'FINAL FOOD STATUS: {final_food}')
     next_coord = None
     if path_to_food and final_food:
-        print("UNSAFE STEP TOWARDS FOOD")
         # step towards food
         next_coord = head_coord.adj(path_to_food[0])
 
@@ -200,7 +191,6 @@ def m_get_food_unigoal(state, food_point, val):
                     path_to_tail = ps.longest_path_to_coord(adj)
 
                     if len(path_to_tail) >= 1:
-                        print('took SAFE step towards food')
                         next_coord = head_coord.adj(path_to_food[0])
                         break 
                 
@@ -211,21 +201,8 @@ def m_get_food_unigoal(state, food_point, val):
                
                     if len(path_to_tail) >= 1:
                         next_coord = head_coord.adj(path_to_tail[0])
-                        print('took step towards tail')
                         break
 
-                    # # safe step towards food
-                    # if path_to_food:
-                    #     next_coord = head_coord.adj(path_to_food[0])
-                    #     print('took step towards food')
-
-                    # step towards tail
-                    # else:
-                    #     next_coord = head_coord.adj(path_to_tail[0])
-                    #     print('took step towards tail')
-                    
-                    # break
-        
     # step away from food to open up a path
     if next_coord is None:
         max_dist = -1
@@ -236,8 +213,6 @@ def m_get_food_unigoal(state, food_point, val):
                 if dist > max_dist:
                     max_dist = dist
                     next_coord = adj
-
-                    print('took randomish action')
     
     # no valid actions...
     if next_coord is None:
@@ -249,20 +224,19 @@ def m_get_food_unigoal(state, food_point, val):
   
 
 def m_get_all_food_multigoal(state, multigoal):
-    print(f'multigoal: {multigoal.ispoint}')
-    print("m_get_all_food_multigoal method called")
-    print('all active food:', get_all_active_food(state))
-    print('snake head:', get_snake_head(state))
+    # print(f'multigoal: {multigoal.ispoint}')
+    # print("m_get_all_food_multigoal method called")
+    # print('all active food:', get_all_active_food(state))
+    # print('snake head:', get_snake_head(state))
     # print(f'snake coords:', get_snake_coords(state))
 
     # check if multigoal achieved!
     if check_multigoal_achieved(state, multigoal):
         return []
 
-    # TODO: determine optimal food ordering sequence to minimize moves
 
     # return []
-    print(f'headsnake: {state.headsnake}')
+    # print(f'headsnake: {state.headsnake}')
     # print(state.isadjacent[state.headsnake])
 
     # determine manhattan distances to all food points
