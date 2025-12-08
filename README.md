@@ -24,6 +24,10 @@ Experimenting with PDDL and Hierarchical Task Network Planners for a classic Sna
 
 See experiment results overview [here](experiments/README.md)
 
+## Final Report
+
+See final report [here](./CMSC722_final_report.pdf)
+
 ## Installation
 ```
 conda create -n SNAKE_HTN python==3.10 -y
